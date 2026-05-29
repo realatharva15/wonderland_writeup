@@ -26,7 +26,7 @@ the main page talks about "follow the white rabbit". this must be a hint for get
 gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirb/common.txt 
 ```
 
-![gobuster]()
+![gobuster](https://github.com/realatharva15/wonderland_writeup/blob/main/images/gobuster.png)
 
 in the /img directory we find two .jpg files. 
 
@@ -48,7 +48,27 @@ the /a directory will be found and so on until the word rabbit is spelt in the w
 
 at the location http://<target_ip>/r/a/b/b/i/t we find ourselves in a dead end unless we look into the source code of the website. 
 
-![sourcecode]()
+`/r`
+![r](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page1.png)
+
+`/r/a`
+![ra](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page2.png)
+
+`/r/a/b`
+![rab](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page3.png)
+
+`/r/a/b/b`
+![rabb](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page4.png)
+
+`/r/a/b/b/i`
+![rabbi](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page5.png)
+
+`/r/a/b/b/i/t`
+![rabbit](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page7.png)
+
+at the end of this nonsense, we finally land on the last directory of the webpage. lets check there are any hints in the source code
+
+![sourcecode](https://github.com/realatharva15/wonderland_writeup/blob/main/images/credentials.png)
 
 we have found the credentials of the user alice. using these, we can access the ssh server with alice's privileges.
 
