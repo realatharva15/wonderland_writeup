@@ -1,8 +1,8 @@
 # Try Hack Me - Wonderland
 # Author: Atharva Bordavekar
 # Difficulty: Medium
-# Points: 
-# Vulnerabilities: 
+# Points: 80
+# Vulnerabilities: Python library hijacking, PATH hijacking, Privilege Escalation via Linux Capabilities
 
 # Phase 1 - Reconnaissance:
 
