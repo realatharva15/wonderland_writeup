@@ -60,7 +60,7 @@ at the location http://<target_ip>/r/a/b/b/i/t we find ourselves in a dead end u
 `/r/a/b/b/`
 ![rabbi](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page5.png)
 
-`/r/a/b/b/i/`
+`/r/a/b/b/i/t/`
 ![rabbit](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page7.png)
 
 at the end of this nonsense, we finally land on the last directory of the webpage. lets check there are any hints in the source code
