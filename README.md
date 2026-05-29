@@ -2,7 +2,7 @@
 # Author: Atharva Bordavekar
 # Difficulty: Medium
 # Points: 80
-# Vulnerabilities: Python library hijacking, PATH hijacking, Privilege Escalation via Linux Capabilities
+# Vulnerabilities: Steganograhy, Python library hijacking,Reverse Engnineering, PATH hijacking, Privilege Escalation via Linux Capabilities
 
 # Phase 1 - Reconnaissance:
 
@@ -29,6 +29,8 @@ gobuster dir -u http://<target_ip> -w /usr/share/wordlists/dirb/common.txt
 ![gobuster](https://github.com/realatharva15/wonderland_writeup/blob/main/images/gobuster.png)
 
 in the /img directory we find two .jpg files. 
+
+![steg](https://github.com/realatharva15/wonderland_writeup/blob/main/images/steganograhy.png)
 
 ```
 NOTE: Whenever you face an image with a .jpg extension in a CTF, always perform a steganography scan on it
@@ -60,8 +62,13 @@ at the location http://<target_ip>/r/a/b/b/i/t we find ourselves in a dead end u
 `/r/a/b/b/`
 ![rabbi](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page5.png)
 
+`/r/a/b/b/i`
+![rabbi](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page6.png)
+
 `/r/a/b/b/i/t/`
 ![rabbit](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page7.png)
+
+# Phase 2 - Initial Foothold:
 
 at the end of this nonsense, we finally land on the last directory of the webpage. lets check there are any hints in the source code
 
@@ -79,9 +86,11 @@ we have a shell as user alice! using the `sudo -l` command, it is found out that
 
     `(rabbit) /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py`
 
+# Phase 3 - Privilege Escalation (Horizontal):
+
 this script is run via another user named `rabbit`. this means user alice can execute the script `walrus_and_the_carpenter.py` as user rabbit. before jumping into crafting a malicious payload, we first have to understand what the `walrus_and_the_carpenter.py` script is doing.
 
-![walrusscript]()
+![walrusscript](https://github.com/realatharva15/wonderland_writeup/blob/main/images/walrusscript.png)
 
 the code imports the random library for selecting any line from the text arbitrarily by using a for loop. with this information, a malicious library with the same name as `random` can be crafted which on execution will run the script which we write in our new `random` library.
 
@@ -110,11 +119,13 @@ now we just need to execute the `walrus_and_the_carpenter.py` as rabbit.
 ```bash
 sudo -u rabbit /usr/bin/python3.6 /home/alice/walrus_and_the_carpenter.py
 ```
+![rabbit](https://github.com/realatharva15/wonderland_writeup/blob/main/images/vertical_escalation.png)
+
 and voila! we have a shell as rabbit. lets start enumerating rabbit's home directory.
 
 in the home directory of `rabbit` , we find a binary which is also an SUID. 
 
-![teapartysuid]()
+![teapartysuid](https://github.com/realatharva15/wonderland_writeup/blob/main/images/teapartysuid.png)
 
 lets transfer it onto our attacker machine and analyse it using Ghidra. 
 
@@ -131,7 +142,7 @@ wget http://<target_ip>:8000/teaParty
 
 lets use Ghidra to analyse the main() function after reverse engineering the binary.
 
-![ghidra]()
+![ghidra](https://github.com/realatharva15/wonderland_writeup/blob/main/images/revese_engineer.png)
 
 ```c
 void main(void)
@@ -185,9 +196,17 @@ according to the hint for the user.txt flag, we might find it in the /root direc
 ```bash
 cat /root/user.txt
 ```
-this gave us the user.txt flag. now lets elevate privileges to `root` and grab that root.txt flag. i used linpeas on the target machine and found out a 95% attack vector on the capabilities. as i did not have any prior knowledge on elavating privileges via capabilites, i used AI to learn how the capability is exploited. 
+this gave us the user.txt flag. now lets elevate privileges to `root` and grab that root.txt flag. 
+
+# Phase 4 - ROOT Access:
+
+i used linpeas on the target machine and found out a 95% attack vector on the capabilities. as i did not have any prior knowledge on elavating privileges via capabilites, i used AI to learn how the capability is exploited. 
+
+![perlharbour](https://github.com/realatharva15/wonderland_writeup/blob/main/images/perlharbour.png)
 
 `Privilege Escalation via Capabilities:`
+
+![linuxsec](https://github.com/realatharva15/wonderland_writeup/blob/main/images/linuxsecurity.png)
 
 unlike the regular privileges which are atomic (all or nothing), eg. root user has privileges while a normal user does not, the capabilities feature allows the users to have privileges for some specific processes. 
 
