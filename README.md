@@ -18,7 +18,7 @@ nmap -p- --min-rate=1000 <target_ip>
 
 `80/tcp open  http`
 
-![page1]()
+![page1](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page1.png)
 
 the main page talks about "follow the white rabbit". this must be a hint for getting an initial foothold on the system. lets carry out a directory fuzz via gobuster
 
@@ -48,22 +48,19 @@ the /a directory will be found and so on until the word rabbit is spelt in the w
 
 at the location http://<target_ip>/r/a/b/b/i/t we find ourselves in a dead end unless we look into the source code of the website. 
 
-`/r`
-![r](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page1.png)
-
-`/r/a`
+`/r/`
 ![ra](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page2.png)
 
-`/r/a/b`
+`/r/a/`
 ![rab](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page3.png)
 
-`/r/a/b/b`
+`/r/a/b/`
 ![rabb](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page4.png)
 
-`/r/a/b/b/i`
+`/r/a/b/b/`
 ![rabbi](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page5.png)
 
-`/r/a/b/b/i/t`
+`/r/a/b/b/i/`
 ![rabbit](https://github.com/realatharva15/wonderland_writeup/blob/main/images/page7.png)
 
 at the end of this nonsense, we finally land on the last directory of the webpage. lets check there are any hints in the source code
